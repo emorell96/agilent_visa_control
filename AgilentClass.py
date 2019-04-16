@@ -1,6 +1,6 @@
 import visa
 from frequency import *
-identifier = "GPIB0::8::INSTR"
+
 class Agilent:
     #commands:
 
@@ -25,6 +25,8 @@ class Agilent:
     form_ascii = ":FORM ASCii"
     #get trace
     trace_query = ":TRACe:DATA?  TRACE{0}"
+    #points set up command
+    points_command = ":SWE:POIN {0}"
     def __init__(self, identifier, marker_number = 1):
         self.identifier = identifier
         self.markers = [ False for i in range(1,13)]
@@ -55,6 +57,14 @@ class Agilent:
         ATTENTION: IT DOESN'T INTERACT WITH THE INSTRUMENT, USE WITH CAUTION
         """
         self.markers[marker-1] = True
+    def set_points(self, points):
+        try:
+            self.points = int(points)
+        except ValueError:
+            print("points is not an integer!!!")
+            print("Setting 256 points as default")
+            self.points = 256
+        self.ag.write(self.points_command.format(self.points))
     def __turnmarker_on(self, marker: int):
         self.ag.write(self.marker_on.format(marker))
         self.markers[marker-1] = True
@@ -78,20 +88,22 @@ class Agilent:
         self.ag.close()
 
 # #Usage:
-agilent = Agilent(identifier)
+if __name__ == "__main__":
+    identifier = "GPIB0::8::INSTR"
+    agilent = Agilent(identifier)
 
-agilent.open()
+    agilent.open()
 
-agilent.set_sa()
-modulation_freq = Frequency(80.1, FreqUnit(FreqUnit.MHz))
-span = Frequency(50, FreqUnit(FreqUnit.kHz))
+    agilent.set_sa()
+    modulation_freq = Frequency(80.1, FreqUnit(FreqUnit.MHz))
+    span = Frequency(50, FreqUnit(FreqUnit.kHz))
 
-agilent.set_marker(1, modulation_freq)
-agilent.set_x(modulation_freq, span)
+    agilent.set_marker(1, modulation_freq)
+    agilent.set_x(modulation_freq, span)
 
-agilent.set_y(3, 10) #in dBm
-values = agilent.get_trace(1)
-print(values)
-print(agilent.get_marker(1))
+    agilent.set_y(3, 10) #in dBm
+    values = agilent.get_trace(1)
+    print(values)
+    print(agilent.get_marker(1))
 
-agilent.close()
+    agilent.close()
