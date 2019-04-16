@@ -27,6 +27,7 @@ class Agilent:
     trace_query = ":TRACe:DATA?  TRACE{0}"
     #points set up command
     points_command = ":SWE:POIN {0}"
+    points_query = ":SWE:POIN?"
     def __init__(self, identifier, marker_number = 1):
         self.identifier = identifier
         self.markers = [ False for i in range(1,13)]
@@ -65,6 +66,9 @@ class Agilent:
             print("Setting 256 points as default")
             self.points = 256
         self.ag.write(self.points_command.format(self.points))
+    def get_points(self):
+        self.points = self.ag.query_ascii_values(self.points_query)
+        return self.points
     def __turnmarker_on(self, marker: int):
         self.ag.write(self.marker_on.format(marker))
         self.markers[marker-1] = True
