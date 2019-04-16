@@ -28,7 +28,7 @@ identifier = "GPIB0::8::INSTR"
 #traces to be read:
 traces = (1,)
 
-print("Reading {0} traces from the VISA resource: {}".format(len(traces), identifier))
+print("Reading {0} traces from the VISA resource: {1}".format(len(traces), identifier))
 
 #Reading configuration file to avoid overwriting any data
 out_path = r"Z:\Lasers\L850P200\Agilent Code\data_{0}.txt"
@@ -65,11 +65,12 @@ agilent.set_x(modulation_freq, span)
 agilent.set_y(ref_level, scale) #in dBm
 agilent.set_points(points)
 
-freq_values = [span.value/points*i+modulation_freq.value-(span.value/2.0) for i in range(points)]
+#todo: add automatic unit detection in this calculation.
+freq_values = [span.value/points*i+modulation_freq.value-(span.value*1e-3/2.0) for i in range(points)]
 values = agilent.get_trace(1)
 #close agilent connection
 agilent.close()
 
 #save into a file
-np.savetxt(out_path, (freq_values, values))
+np.savetxt(out_path, np.c_[freq_values, values])
 
