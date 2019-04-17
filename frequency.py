@@ -65,6 +65,8 @@ class Frequency:
             return Frequency(self.value+other.value, self.unit, self.time)
         return self.convert(targetunit)+other.convert(targetunit)
     __radd__ = __add__
+    def __sub__(self, other):
+        return self + (-1*other)
     def __truediv__(self, other, targetunit = FreqUnit(FreqUnit.Hz)):
         if isinstance(other, Frequency):
             #implements division of frequencies:
