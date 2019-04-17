@@ -49,9 +49,13 @@ class Frequency:
             return self        
     def __mul__(self, other, targetunit = FreqUnit(FreqUnit.Hz)):
         #multiplication of freq * freq so final unit is sqfreq
-        if self.unit == other.unit:
-            return Frequency(self.value*other.value, self.unit**2, self.time)
-        return self.convert(targetunit)*other.convert(targetunit)
+        try:
+            if self.unit == other.unit:
+                return Frequency(self.value*other.value, self.unit**2, self.time)
+            return self.convert(targetunit)*other.convert(targetunit)
+        except AttributeError:
+            #other is not a freq type so use rmul
+            return self.__rmul__(other)
     def __rmul__(self, const):
         #multiplication by a constant ( unit is kept the same):
         return Frequency(const * self.value, self.unit, self.time)
@@ -61,6 +65,20 @@ class Frequency:
             return Frequency(self.value+other.value, self.unit, self.time)
         return self.convert(targetunit)+other.convert(targetunit)
     __radd__ = __add__
+    def __truediv__(self, other, targetunit = FreqUnit(FreqUnit.Hz)):
+        if isinstance(other, Frequency):
+            #implements division of frequencies:
+            #it returns a number without unit (so a float)
+            if self.unit == other.unit:
+                return self.value/other.value
+            return self.convert(targetunit)/other.convert(targetunit)
+        else:
+            #we assume it's a digit
+            try:
+                return (1/other)*self
+            except TypeError:
+                print("Wrong Type!! Expected a digit (float, int) but got a {}".format(type(other)))
+            
 
 
 if __name__ == "__main__":
@@ -69,5 +87,8 @@ if __name__ == "__main__":
     freq2 = Frequency(1, FreqUnit(FreqUnit.GHz))
     print((freq1*freq2).convert(SqFreqUnit(SqFreqUnit.sqMHz)))
     print(2*freq1)
+    print(freq1*2)
     print((freq1+freq2).convert(FreqUnit(FreqUnit.Hz)))
     print(freq1.__mul__(freq2, FreqUnit(FreqUnit.MHz)))
+    print((freq1/1000).convert(FreqUnit(FreqUnit.kHz)))
+    print((freq1/freq2))
