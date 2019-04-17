@@ -1,11 +1,11 @@
 # agilent_visa_control
 A set of files aimed at facilitating the transfer of data from Agilent Spectrum Analizers through VISA Interface
 
-##Prerequisites:
+## Prerequisites:
 
 You will need PyVisa (and PyVisa's dependencies too obviously).
 
-##Installation:
+## Installation:
 
 No need to install, just clone this repository to your working workspace folder and code inside of it.
 
