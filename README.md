@@ -7,9 +7,13 @@ You will need PyVisa (and PyVisa's dependencies too obviously).
 
 ## Installation:
 
-No need to install, just clone this repository to your working workspace folder and code inside of it.
+Just run:
 
-For a good example on how to use the code check Agilent_save_trace.py
+```
+pip install agilent-visa-control
+```
+
+For a good example on how to use the code check Agilent_save_trace.py in the bin folder.
 
 Frequency.py is a helper class to help you deal with frequencies and its conversion. You can by using this class just sum or substract frequencies and the units will be taken care of by the script. You can then convert to which ever frequency unit you need. Check Frequency.py for examples on usage (after  `` if __name__ == __main__: ``)
 
@@ -22,10 +26,14 @@ It is something like
 ```python
 identifier = "GPIB0::8::INSTR"
 ```
+Import your library:
+```
+import agilent_visa_control.agilent as ag
+```
 Once you know your identifier you will need to create the Agilent class object:
 
 ```python
-agilent = Agilent(identifier)
+agilent = ag.Agilent(identifier)
 ```
 Then you need to open your connection:
 ```python
@@ -39,8 +47,8 @@ agilent.set_sa()
 ```
 Then you create the frequencies at which you want to center and the span of the analyzer.
 ```
-center_freq = Frequency(80.1, FreqUnit(FreqUnit.MHz))
-span = Frequency(50, FreqUnit(FreqUnit.kHz))
+center_freq = ag.Frequency(80.1, ag.FreqUnit(ag.FreqUnit.MHz))
+span = ag.Frequency(50, ag.FreqUnit(ag.FreqUnit.kHz))
 ```
 And we set the x Axis:
 ```
