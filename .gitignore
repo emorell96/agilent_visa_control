@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+data_ram.txt
+data_emi.txt
+data_emi noise.txt
+data_master master.txt
+data_master slave.txt
+data_mastermaster.txt
+data_masterslave.txt
+data_ram noise.txt
