@@ -110,3 +110,4 @@ data_master slave.txt
 data_mastermaster.txt
 data_masterslave.txt
 data_ram noise.txt
+bin/agilent.py

@@ -1,7 +1,7 @@
 import configparser
 import math as m
-import AgilentClass  as ag
-from frequency import *
+import agilent_visa_control.agilent  as ag
+from agilent_visa_control.frequency import *
 import numpy as np
 
 """ visa.logger.setLevel(logging.DEBUG)
